@@ -1,14 +1,8 @@
-# **구현 목록**
+# **Features**
 
 
-> ### Container
+> ### Hooks Refactoring
 - [x] Home
-- [x] Tv Shows
-- [x] Search
-- [x] Details
-
-> ### Presenter
-- [x] Home
-- [x] Tv Shows
-- [x] Search
-- [x] Details
+- [ ] Tv Shows
+- [ ] Search
+- [ ] Details
