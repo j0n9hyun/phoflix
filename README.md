@@ -3,6 +3,6 @@
 
 > ### Hooks Refactoring
 - [x] Home
-- [ ] Tv Shows
+- [x] Tv Shows
 - [ ] Search
 - [ ] Details
