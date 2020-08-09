@@ -22,7 +22,7 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export default () => {
+function useSearch() {
   const [loading, setLoading] = useState(false);
   const [movieResults, setMovieResults] = useState(null);
   const [tvResults, setTvResults] = useState(null);
@@ -116,4 +116,6 @@ export default () => {
       )}
     </Container>
   );
-};
+}
+
+export default useSearch;
