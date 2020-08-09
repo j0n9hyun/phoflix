@@ -12,7 +12,7 @@ const Container = styled.div`
   padding-top: 20px;
 `;
 
-function useHome() {
+export default () => {
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState(null);
   const [upcoming, setUpcoming] = useState(null);
@@ -99,6 +99,4 @@ function useHome() {
       </Container>
     </>
   );
-}
-
-export default useHome;
+};

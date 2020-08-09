@@ -4,5 +4,5 @@
 > ### Hooks Refactoring
 - [x] Home
 - [x] Tv Shows
-- [ ] Search
+- [x] Search
 - [ ] Details
