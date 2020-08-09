@@ -12,7 +12,7 @@ const Container = styled.div`
   padding-top: 20px;
 `;
 
-function useHome() {
+export default () => {
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState(null);
   const [upcoming, setUpcoming] = useState(null);
@@ -43,12 +43,14 @@ function useHome() {
     Home();
   }, []);
   return loading ? (
-    <Loader />
-  ) : (
     <>
       <Helmet>
         <title>영화 목록</title>
       </Helmet>
+      <Loader />
+    </>
+  ) : (
+    <>
       <Container>
         {nowPlaying && nowPlaying.length > 0 && (
           <Section title='현재 상영중'>
@@ -99,6 +101,4 @@ function useHome() {
       </Container>
     </>
   );
-}
-
-export default useHome;
+};

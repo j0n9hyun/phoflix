@@ -43,12 +43,14 @@ function useTv() {
     Tv();
   }, []);
   return loading ? (
-    <Loader />
-  ) : (
     <>
       <Helmet>
         <title>TV 목록</title>
       </Helmet>
+      <Loader />
+    </>
+  ) : (
+    <>
       <Container>
         {topRated && topRated.length > 0 && (
           <Section title='최고 평점순'>
