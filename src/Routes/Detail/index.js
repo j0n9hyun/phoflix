@@ -54,7 +54,7 @@ const Title = styled.h3`
 `;
 
 const Item = styled.span`
-  font-size: 30px;
+  font-size: 25px;
 `;
 const Overview = styled.p`
   margin-top: 10px;
@@ -68,7 +68,7 @@ const ItemContainer = styled.span`
 `;
 const Divider = styled.span`
   margin: 0 10px;
-  font-size: 30px;
+  font-size: 25px;
 `;
 
 const Video = styled.div`
@@ -81,18 +81,140 @@ const Video = styled.div`
   padding: 10px;
 `;
 
+const IMDB = styled.span`
+  font-size: 20px;
+`;
+
+const TrailerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+`;
+const TrailerTitle = styled.p`
+  color: peru;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 15px;
+`;
+const TrailerAnchor = styled.a`
+  margin-bottom: 15px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const Company = styled.div`
+  margin-bottom: 20px;
+`;
+const CompanyContainer = styled.div`
+  display: flex;
+  overflow: auto;
+`;
+const CompanyBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+  border-radius: 2px;
+  padding: 5px;
+  margin-right: 10px;
+  margin-top: 7px;
+  &:last-child() {
+    margin-right: 0;
+  }
+`;
+const CompanyTitle = styled.p`
+  color: peru;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+`;
+const CompanyLogo = styled.img`
+  width: auto;
+  height: 70px;
+  margin-bottom: 5px;
+`;
+const CompanyText = styled.span``;
+
+const Countries = styled.div`
+  margin-bottom: 10px;
+`;
+const CountriesTitle = styled.p`
+  color: peru;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 15px;
+`;
+const CountriesText = styled.span`
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 5px;
+`;
+
+const Seasons = styled.div`
+  margin-bottom: 20px;
+`;
+const SeasonsTitle = styled.p`
+  color: peru;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
+const PosterFlex = styled.div`
+  display: flex;
+  overflow: auto;
+`;
+const PosterImg = styled.img`
+  height: 250px;
+  width: auto;
+  transition: opacity 0.3s ease-in-out;
+`;
+
+const PosterTitle = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
+const PosterAir = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+`;
+const PosterTextBox = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 100px;
+  left: 50px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+`;
+const PosterContainer = styled.div`
+  position: relative;
+  height: 250px;
+  width: 172px;
+  display: flex;
+  flex-direction: row;
+  margin-right: 10px;
+  &:hover {
+    ${PosterTextBox} {
+      opacity: 1;
+    }
+    ${PosterImg} {
+      opacity: 0.3;
+    }
+  }
+`;
+
+const Test = styled.div`
+  border: 3px solid red;
+  height: 100%;
+  display: flex;
+`;
+
 function useDetail() {
   const { id } = useParams();
   const { push } = useHistory();
   const { pathname } = useLocation();
-
-  // const {
-  //   location: { pathname },
-  //   match: {
-  //     params: { id },
-  //   },
-  //   history: { push },
-  // } = props;
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
@@ -129,53 +251,162 @@ function useDetail() {
       <Loader />
     </>
   ) : (
-    <Container>
-      <Helmet>
-        <title>{result.title ? result.title : result.name}</title>
-      </Helmet>
-      <Backdrop
-        bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
-      />
-      <Content>
-        <Cover
-          bgImage={
-            result.poster_path
-              ? `https://image.tmdb.org/t/p/original${result.poster_path}`
-              : require('assets/NoPoster.jpg')
-          }
+    <Test>
+      <Container>
+        <Helmet>
+          <title>{result.title ? result.title : result.name}</title>
+        </Helmet>
+        <Backdrop
+          bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
         />
-        <Data>
-          <Title>{result.title ? result.title : result.name}</Title>
-          <ItemContainer>
-            <Item>
-              {result.release_date
-                ? result.release_date
-                : result.first_air_date}
-            </Item>
-            <Divider>⚡</Divider>
-            <Item>
-              {result.runtime ? result.runtime : result.episode_run_time}분
-            </Item>
-            <Divider>🍬</Divider>
-            <Item>
-              {result.genres.map((genre, idx) =>
-                idx === result.genres.length - 1 ? genre.name : `${genre.name}/`
-              )}
-            </Item>
-            <Divider>💫</Divider>
-            <Item>{result.vote_average}/10</Item>
-          </ItemContainer>
-          <Overview>
-            {result.overview
-              ? result.overview
-              : '개요가 기재되어 있지 않습니다.'}
-          </Overview>
-          <Video>
-            {result.production_companies.map((c) => `${c.name}`).join('\n\n\n')}
-          </Video>
-        </Data>
-      </Content>
-    </Container>
+
+        <Content>
+          <Cover
+            bgImage={
+              result.poster_path
+                ? `https://image.tmdb.org/t/p/original${result.poster_path}`
+                : require('assets/NoPoster.png')
+            }
+          />
+
+          <Data>
+            <Title>{result.title ? result.title : result.name}</Title>{' '}
+            <ItemContainer>
+              <Item>
+                {result.release_date
+                  ? result.release_date
+                  : result.first_air_date}
+              </Item>
+              <Divider>⌛</Divider>
+              <Item>
+                {result.runtime ? result.runtime : result.episode_run_time}분
+              </Item>
+              <Divider>🎡</Divider>
+              <Item>
+                {result.genres.map((genre, idx) =>
+                  idx === result.genres.length - 1
+                    ? genre.name
+                    : `${genre.name}/`
+                )}
+              </Item>
+              <Divider>⭐</Divider>
+              <Item>{result.vote_average}/10</Item>
+            </ItemContainer>
+            <Overview>
+              {result.overview
+                ? result.overview
+                : '개요가 기재되어 있지 않습니다.'}
+            </Overview>
+            <Company>
+              <CompanyTitle>
+                {result.production_companies.length === 0
+                  ? null
+                  : result.production_companies
+                  ? '제작사'
+                  : null}
+              </CompanyTitle>
+              <CompanyContainer>
+                {result.production_companies &&
+                  result.production_companies.map((item, index) =>
+                    index === result.production_companies.length - 1 ? (
+                      <CompanyBox key={index}>
+                        <CompanyLogo
+                          key={item.id}
+                          src={
+                            item.logo_path
+                              ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
+                              : require('assets/NoPoster.png')
+                          }
+                          alt='logo'
+                        />
+                        <CompanyText>{item.name}</CompanyText>
+                      </CompanyBox>
+                    ) : (
+                      <CompanyBox key={index}>
+                        <CompanyLogo
+                          key={item.id}
+                          src={
+                            item.logo_path
+                              ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
+                              : require('assets/NoPoster.png')
+                          }
+                          alt='logo'
+                        />
+                        <CompanyText>{item.name}</CompanyText>
+                      </CompanyBox>
+                    )
+                  )}
+              </CompanyContainer>
+            </Company>
+            <Countries>
+              <CountriesTitle>
+                {result.production_countries ? '제작 국가' : null}
+              </CountriesTitle>
+              {result.production_countries &&
+                result.production_countries.map((item, index) =>
+                  index === result.production_countries.length - 1 ? (
+                    <CountriesText key={index}>{item.name}</CountriesText>
+                  ) : (
+                    <CountriesText
+                      key={index}
+                    >{`${item.name} | `}</CountriesText>
+                  )
+                )}
+            </Countries>
+            <Seasons>
+              <SeasonsTitle>{result.seasons ? '시리즈' : null}</SeasonsTitle>
+              <PosterFlex>
+                {result.seasons &&
+                  result.seasons.map((item, index) => (
+                    <PosterContainer key={index}>
+                      <PosterImg
+                        src={
+                          item.poster_path
+                            ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
+                            : require('assets/NoPoster.png')
+                        }
+                      />
+                      <PosterTextBox>
+                        <PosterTitle>{item.name}</PosterTitle>
+                        <PosterAir>{item.air_date}</PosterAir>
+                      </PosterTextBox>
+                    </PosterContainer>
+                  ))}
+              </PosterFlex>
+            </Seasons>
+            <TrailerContainer>
+              <TrailerTitle>
+                {result.videos.results.length === 0
+                  ? null
+                  : result.videos.results
+                  ? 'Youtube Videos'
+                  : null}
+              </TrailerTitle>
+              {result.videos.results &&
+                result.videos.results.map((item, index) =>
+                  index === result.videos.results.length - 1 ? (
+                    <TrailerAnchor
+                      href={`https://www.youtube.com/watch?v=${item.key}`}
+                      key={item.id}
+                      target={'_blank'}
+                    >
+                      {`# ${index} - ${item.name}`}
+                    </TrailerAnchor>
+                  ) : (
+                    <TrailerAnchor
+                      href={`https://www.youtube.com/watch?v=${item.key}`}
+                      key={item.id}
+                      target={'_blank'}
+                    >
+                      {`# ${index} - ${item.name}`}
+                    </TrailerAnchor>
+                  )
+                )}
+            </TrailerContainer>
+          </Data>
+        </Content>
+      </Container>
+    </Test>
   );
 }
 

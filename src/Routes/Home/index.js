@@ -43,12 +43,14 @@ export default () => {
     Home();
   }, []);
   return loading ? (
-    <Loader />
-  ) : (
     <>
       <Helmet>
         <title>영화 목록</title>
       </Helmet>
+      <Loader />
+    </>
+  ) : (
+    <>
       <Container>
         {nowPlaying && nowPlaying.length > 0 && (
           <Section title='현재 상영중'>
