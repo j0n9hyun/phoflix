@@ -29,18 +29,34 @@ const Backdrop = styled.div`
 
 const Content = styled.div`
   display: flex;
-  width: 100%;
   position: relative;
-  z-index: 1;
+  z-index: 5;
+  margin: 0px auto;
+  width: 90%;
   height: 100%;
+  border-radius: 10px;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(0, 0, 0, 0.8)
+  );
 `;
 const Cover = styled.div`
-  width: 30%;
+  width: 40%;
+  margin-right: 30px;
   background-image: url(${(props) => props.bgImage});
   background-position: center center;
   background-size: cover;
   height: auto;
-  border-radius: 5px;
+  border-radius: 10px;
+  mask-image: -webkit-gradient(
+    linear,
+    100% 0%,
+    0% 0%,
+    to(rgb(0, 0, 0)),
+    color-stop(0.5, rgb(0, 0, 0)),
+    from(rgba(0, 0, 0, 0))
+  );
 `;
 
 const Data = styled.div`
@@ -49,6 +65,7 @@ const Data = styled.div`
 `;
 
 const Title = styled.h3`
+  margin-top: 2rem;
   font-size: 2.5rem;
   margin-bottom: 10px;
 `;
@@ -61,7 +78,7 @@ const Overview = styled.p`
   font-size: 1.2rem;
   line-height: 1.5rem;
   opacity: 0.8;
-  width: 50%;
+  width: 90%;
 `;
 const ItemContainer = styled.span`
   margin: 20px 0;
@@ -71,15 +88,15 @@ const Divider = styled.span`
   font-size: 25px;
 `;
 
-const Video = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  height: 380px;
-  padding: 10px;
-`;
+// const Video = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   width: 100%;
+//   box-sizing: border-box;
+//   text-align: center;
+//   height: 380px;
+//   padding: 10px;
+// `;
 
 const IMDB = styled.span`
   font-size: 20px;
@@ -105,6 +122,7 @@ const TrailerAnchor = styled.a`
 
 const Company = styled.div`
   margin-bottom: 20px;
+  margin-top: 10px;
 `;
 const CompanyContainer = styled.div`
   display: flex;
@@ -115,7 +133,11 @@ const CompanyBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+  width: 100%;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
   border-radius: 2px;
   padding: 5px;
   margin-right: 10px;
@@ -251,162 +273,156 @@ function useDetail() {
       <Loader />
     </>
   ) : (
-    <Test>
-      <Container>
-        <Helmet>
-          <title>{result.title ? result.title : result.name}</title>
-        </Helmet>
-        <Backdrop
-          bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
+    <Container>
+      <Helmet>
+        <title>{result.title ? result.title : result.name}</title>
+      </Helmet>
+      <Backdrop
+        bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
+      />
+
+      <Content>
+        <Cover
+          bgImage={
+            result.poster_path
+              ? `https://image.tmdb.org/t/p/original${result.poster_path}`
+              : require('assets/NoPoster.png')
+          }
         />
 
-        <Content>
-          <Cover
-            bgImage={
-              result.poster_path
-                ? `https://image.tmdb.org/t/p/original${result.poster_path}`
-                : require('assets/NoPoster.png')
-            }
-          />
-
-          <Data>
-            <Title>{result.title ? result.title : result.name}</Title>{' '}
-            <ItemContainer>
-              <Item>
-                {result.release_date
-                  ? result.release_date
-                  : result.first_air_date}
-              </Item>
-              <Divider>⌛</Divider>
-              <Item>
-                {result.runtime ? result.runtime : result.episode_run_time}분
-              </Item>
-              <Divider>🎡</Divider>
-              <Item>
-                {result.genres.map((genre, idx) =>
-                  idx === result.genres.length - 1
-                    ? genre.name
-                    : `${genre.name}/`
-                )}
-              </Item>
-              <Divider>⭐</Divider>
-              <Item>{result.vote_average}/10</Item>
-            </ItemContainer>
-            <Overview>
-              {result.overview
-                ? result.overview
-                : '개요가 기재되어 있지 않습니다.'}
-            </Overview>
-            <Company>
-              <CompanyTitle>
-                {result.production_companies.length === 0
-                  ? null
-                  : result.production_companies
-                  ? '제작사'
-                  : null}
-              </CompanyTitle>
-              <CompanyContainer>
-                {result.production_companies &&
-                  result.production_companies.map((item, index) =>
-                    index === result.production_companies.length - 1 ? (
-                      <CompanyBox key={index}>
-                        <CompanyLogo
-                          key={item.id}
-                          src={
-                            item.logo_path
-                              ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
-                              : require('assets/NoPoster.png')
-                          }
-                          alt='logo'
-                        />
-                        <CompanyText>{item.name}</CompanyText>
-                      </CompanyBox>
-                    ) : (
-                      <CompanyBox key={index}>
-                        <CompanyLogo
-                          key={item.id}
-                          src={
-                            item.logo_path
-                              ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
-                              : require('assets/NoPoster.png')
-                          }
-                          alt='logo'
-                        />
-                        <CompanyText>{item.name}</CompanyText>
-                      </CompanyBox>
-                    )
-                  )}
-              </CompanyContainer>
-            </Company>
-            <Countries>
-              <CountriesTitle>
-                {result.production_countries ? '제작 국가' : null}
-              </CountriesTitle>
-              {result.production_countries &&
-                result.production_countries.map((item, index) =>
-                  index === result.production_countries.length - 1 ? (
-                    <CountriesText key={index}>{item.name}</CountriesText>
-                  ) : (
-                    <CountriesText
-                      key={index}
-                    >{`${item.name} | `}</CountriesText>
-                  )
-                )}
-            </Countries>
-            <Seasons>
-              <SeasonsTitle>{result.seasons ? '시리즈' : null}</SeasonsTitle>
-              <PosterFlex>
-                {result.seasons &&
-                  result.seasons.map((item, index) => (
-                    <PosterContainer key={index}>
-                      <PosterImg
+        <Data>
+          <Title>{result.title ? result.title : result.name}</Title>{' '}
+          <ItemContainer>
+            <Item>
+              {result.release_date
+                ? result.release_date
+                : result.first_air_date}
+            </Item>
+            <Divider>⌛</Divider>
+            <Item>
+              {result.runtime ? result.runtime : result.episode_run_time}분
+            </Item>
+            <Divider>🎡</Divider>
+            <Item>
+              {result.genres.map((genre, idx) =>
+                idx === result.genres.length - 1 ? genre.name : `${genre.name}/`
+              )}
+            </Item>
+            <Divider>⭐</Divider>
+            <Item>{result.vote_average}/10</Item>
+          </ItemContainer>
+          <Overview>
+            {result.overview
+              ? result.overview
+              : '개요가 기재되어 있지 않습니다.'}
+          </Overview>
+          <Company>
+            <CompanyTitle>
+              {result.production_companies.length === 0
+                ? null
+                : result.production_companies
+                ? '제작사'
+                : null}
+            </CompanyTitle>
+            <CompanyContainer>
+              {result.production_companies &&
+                result.production_companies.map((item, index) =>
+                  index === result.production_companies.length - 1 ? (
+                    <CompanyBox key={index}>
+                      <CompanyLogo
+                        key={item.id}
                         src={
-                          item.poster_path
-                            ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
+                          item.logo_path
+                            ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
                             : require('assets/NoPoster.png')
                         }
+                        alt='logo'
                       />
-                      <PosterTextBox>
-                        <PosterTitle>{item.name}</PosterTitle>
-                        <PosterAir>{item.air_date}</PosterAir>
-                      </PosterTextBox>
-                    </PosterContainer>
-                  ))}
-              </PosterFlex>
-            </Seasons>
-            <TrailerContainer>
-              <TrailerTitle>
-                {result.videos.results.length === 0
-                  ? null
-                  : result.videos.results
-                  ? 'Youtube Videos'
-                  : null}
-              </TrailerTitle>
-              {result.videos.results &&
-                result.videos.results.map((item, index) =>
-                  index === result.videos.results.length - 1 ? (
-                    <TrailerAnchor
-                      href={`https://www.youtube.com/watch?v=${item.key}`}
-                      key={item.id}
-                      target={'_blank'}
-                    >
-                      {`# ${index} - ${item.name}`}
-                    </TrailerAnchor>
+                      <CompanyText>{item.name}</CompanyText>
+                    </CompanyBox>
                   ) : (
-                    <TrailerAnchor
-                      href={`https://www.youtube.com/watch?v=${item.key}`}
-                      key={item.id}
-                      target={'_blank'}
-                    >
-                      {`# ${index} - ${item.name}`}
-                    </TrailerAnchor>
+                    <CompanyBox key={index}>
+                      <CompanyLogo
+                        key={item.id}
+                        src={
+                          item.logo_path
+                            ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
+                            : require('assets/NoPoster.png')
+                        }
+                        alt='logo'
+                      />
+                      <CompanyText>{item.name}</CompanyText>
+                    </CompanyBox>
                   )
                 )}
-            </TrailerContainer>
-          </Data>
-        </Content>
-      </Container>
-    </Test>
+            </CompanyContainer>
+          </Company>
+          <Countries>
+            <CountriesTitle>
+              {result.production_countries ? '제작 국가' : null}
+            </CountriesTitle>
+            {result.production_countries &&
+              result.production_countries.map((item, index) =>
+                index === result.production_countries.length - 1 ? (
+                  <CountriesText key={index}>{item.name}</CountriesText>
+                ) : (
+                  <CountriesText key={index}>{`${item.name} | `}</CountriesText>
+                )
+              )}
+          </Countries>
+          <Seasons>
+            <SeasonsTitle>{result.seasons ? '시리즈' : null}</SeasonsTitle>
+            <PosterFlex>
+              {result.seasons &&
+                result.seasons.map((item, index) => (
+                  <PosterContainer key={index}>
+                    <PosterImg
+                      src={
+                        item.poster_path
+                          ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
+                          : require('assets/NoPoster.png')
+                      }
+                    />
+                    <PosterTextBox>
+                      <PosterTitle>{item.name}</PosterTitle>
+                      <PosterAir>{item.air_date}</PosterAir>
+                    </PosterTextBox>
+                  </PosterContainer>
+                ))}
+            </PosterFlex>
+          </Seasons>
+          <TrailerContainer>
+            <TrailerTitle>
+              {result.videos.results.length === 0
+                ? null
+                : result.videos.results
+                ? '비디오'
+                : null}
+            </TrailerTitle>
+            {/* {result.videos.results &&
+              result.videos.results.map((item, index) =>
+                index === result.videos.results.length - 1 ? (
+                  <TrailerAnchor
+                    href={`https://www.youtube.com/watch?v=${item.key}`}
+                    key={item.id}
+                    target={'_blank'}
+                  >
+                    {`# ${index} - ${item.name}`}
+                  </TrailerAnchor>
+                ) : (
+                  <TrailerAnchor
+                    href={`https://www.youtube.com/watch?v=${item.key}`}
+                    key={item.id}
+                    target={'_blank'}
+                  >
+                    {`# ${index} - ${item.name}`}
+                  </TrailerAnchor>
+                )
+              )} */}
+          </TrailerContainer>
+        </Data>
+      </Content>
+    </Container>
   );
 }
 
