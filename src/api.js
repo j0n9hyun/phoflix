@@ -8,13 +8,6 @@ const api = axios.create({
   },
 });
 
-// api.get('movie/upcoming', {
-//   params: {
-//     api_key: '56fad3b2fe9fadb33c9614c89e6d9897',
-//     language: 'en-US',
-//   },
-// });
-
 export const moviesApi = {
   nowPlaying: () => api.get('movie/now_playing'),
   upcoming: () => api.get('movie/upcoming'),
@@ -43,6 +36,7 @@ export const tvApi = {
         append_to_response: 'videos',
       },
     }),
+  showImdb: (id) => api.get(`tv/${id}/external_ids`),
   search: (term) =>
     api.get('search/tv', {
       params: {

@@ -57,11 +57,21 @@ const Cover = styled.div`
     color-stop(0.5, rgb(0, 0, 0)),
     from(rgba(0, 0, 0, 0))
   );
+  @media only screen and (max-width: 480px) {
+    width: auto;
+  }
 `;
+// ANCHOR 포스트 관련 css
+// FIXME  몇 개 수정 필요
+// NOTE  모바일 추가 대응
 
+// TODO 포스트 모바일 대응
 const Data = styled.div`
   width: 70%;
   margin-left: 10px;
+  @media only screen and (max-width: 480px) {
+    width: $(props => (props.span ? props.span / 12 * 100: '8.33'));
+  }
 `;
 
 const Title = styled.h3`
@@ -134,7 +144,7 @@ const CompanyBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  /* width: 100%; */
   opacity: 0.7;
   &:hover {
     opacity: 1;
@@ -188,7 +198,7 @@ const PosterFlex = styled.div`
   overflow: auto;
 `;
 const PosterImg = styled.img`
-  height: 215px;
+  height: 130px;
   width: auto;
   transition: opacity 0.3s ease-in-out;
 `;
@@ -199,25 +209,27 @@ const PosterTitle = styled.span`
   margin-bottom: 10px;
 `;
 const PosterAir = styled.span`
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
 `;
 const PosterTextBox = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 100px;
-  left: 50px;
+  margin-left: 3px;
+  /* top: 10%;
+  left: 20%; */
+  /* text-align: center; */
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 `;
 const PosterContainer = styled.div`
   position: relative;
   height: 100%;
-  width: 20%;
+  /* width: 100%; */
   display: flex;
   flex-direction: row;
-  /* margin-right: 5px; */
+  margin-right: 15px;
   &:hover {
     ${PosterTextBox} {
       opacity: 1;
@@ -244,6 +256,7 @@ function useDetail() {
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
+  const [imdb, setImdb] = useState(null);
   const isMovie = pathname.includes('/movie/');
 
   const Detail = async () => {
@@ -272,18 +285,16 @@ function useDetail() {
 
   return loading ? (
     <>
-      <Helmet>
-        <title>Loading</title>
-      </Helmet>
       <Loader />
     </>
   ) : (
     <Container>
-      <Helmet>
-        <title>{result.title ? result.title : result.name}</title>
-      </Helmet>
       <Backdrop
-        bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
+        bgImage={
+          result.backdrop_path
+            ? `https://image.tmdb.org/t/p/original${result.backdrop_path}`
+            : require('assets/NoPoster.png')
+        }
       />
 
       <Content>
@@ -298,7 +309,15 @@ function useDetail() {
         <Data>
           <Title>
             {result.title ? result.title : result.name}
-            {result.seasons ? null : (
+            {result.seasons ? (
+              <a
+                href={`https://www.imdb.com/title/${result.id}`}
+                target={'_blank'}
+                rel='noopener noreferrer'
+              >
+                <IMDB src='https://img.icons8.com/color/1x/imdb.png' />
+              </a>
+            ) : (
               <a
                 href={`https://www.imdb.com/title/${result.imdb_id}`}
                 target={'_blank'}
