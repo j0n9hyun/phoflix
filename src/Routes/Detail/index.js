@@ -32,7 +32,7 @@ const Content = styled.div`
   position: relative;
   z-index: 5;
   margin: 0px auto;
-  width: 70%;
+  width: 90%;
   height: 100%;
   border-radius: 10px;
   background-image: linear-gradient(
@@ -78,7 +78,7 @@ const Overview = styled.p`
   font-size: 1.2rem;
   line-height: 1.5rem;
   opacity: 0.8;
-  width: 50%;
+  width: 90%;
 `;
 const ItemContainer = styled.span`
   margin: 20px 0;
