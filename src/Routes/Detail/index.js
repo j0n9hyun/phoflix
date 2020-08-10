@@ -71,14 +71,14 @@ const Title = styled.h3`
 `;
 
 const Item = styled.span`
-  font-size: 25px;
+  font-size: 20px;
 `;
 const Overview = styled.p`
   margin-top: 10px;
   font-size: 1.2rem;
   line-height: 1.5rem;
   opacity: 0.8;
-  width: 90%;
+  width: 85%;
 `;
 const ItemContainer = styled.span`
   margin: 20px 0;
@@ -98,8 +98,9 @@ const Divider = styled.span`
 //   padding: 10px;
 // `;
 
-const IMDB = styled.span`
-  font-size: 20px;
+const IMDB = styled.img`
+  position: absolute;
+  margin-left: 10px;
 `;
 
 const TrailerContainer = styled.div`
@@ -187,7 +188,7 @@ const PosterFlex = styled.div`
   overflow: auto;
 `;
 const PosterImg = styled.img`
-  height: 250px;
+  height: 215px;
   width: auto;
   transition: opacity 0.3s ease-in-out;
 `;
@@ -212,11 +213,11 @@ const PosterTextBox = styled.div`
 `;
 const PosterContainer = styled.div`
   position: relative;
-  height: 250px;
-  width: 172px;
+  height: 100%;
+  width: 20%;
   display: flex;
   flex-direction: row;
-  margin-right: 10px;
+  /* margin-right: 5px; */
   &:hover {
     ${PosterTextBox} {
       opacity: 1;
@@ -225,12 +226,6 @@ const PosterContainer = styled.div`
       opacity: 0.3;
     }
   }
-`;
-
-const Test = styled.div`
-  border: 3px solid red;
-  height: 100%;
-  display: flex;
 `;
 
 function useDetail() {
@@ -291,7 +286,19 @@ function useDetail() {
         />
 
         <Data>
-          <Title>{result.title ? result.title : result.name}</Title>{' '}
+          <Title>
+            {result.title ? result.title : result.name}
+            {result.seasons ? null : (
+              <a
+                href={`https://www.imdb.com/title/${result.imdb_id}`}
+                target={'_blank'}
+                rel='noopener noreferrer'
+              >
+                <IMDB src='https://img.icons8.com/color/1x/imdb.png' />
+              </a>
+            )}
+          </Title>
+
           <ItemContainer>
             <Item>
               {result.release_date
