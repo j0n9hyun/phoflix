@@ -43,6 +43,7 @@ export const tvApi = {
         append_to_response: 'videos',
       },
     }),
+  showImdb: (id) => api.get(`tv/${id}/external_ids`),
   search: (term) =>
     api.get('search/tv', {
       params: {
