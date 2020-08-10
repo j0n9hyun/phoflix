@@ -228,6 +228,15 @@ const PosterContainer = styled.div`
   }
 `;
 
+const Test = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background-color: transparent;
+  margin: 30px 0px;
+  border-radius: 10px;
+`;
+
 function useDetail() {
   const { id } = useParams();
   const { push } = useHistory();
@@ -256,6 +265,7 @@ function useDetail() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     Detail();
   }, []);
@@ -323,90 +333,93 @@ function useDetail() {
               ? result.overview
               : '개요가 기재되어 있지 않습니다.'}
           </Overview>
-          <Company>
-            <CompanyTitle>
-              {result.production_companies.length === 0
-                ? null
-                : result.production_companies
-                ? '제작사'
-                : null}
-            </CompanyTitle>
-            <CompanyContainer>
-              {result.production_companies &&
-                result.production_companies.map((item, index) =>
-                  index === result.production_companies.length - 1 ? (
-                    <CompanyBox key={index}>
-                      <CompanyLogo
-                        key={item.id}
-                        src={
-                          item.logo_path
-                            ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
-                            : require('assets/NoPoster.png')
-                        }
-                        alt='logo'
-                      />
-                      <CompanyText>{item.name}</CompanyText>
-                    </CompanyBox>
+          <Test>
+            <Company>
+              <CompanyTitle>
+                {result.production_companies.length === 0
+                  ? null
+                  : result.production_companies
+                  ? '제작사'
+                  : null}
+              </CompanyTitle>
+              <CompanyContainer>
+                {result.production_companies &&
+                  result.production_companies.map((item, index) =>
+                    index === result.production_companies.length - 1 ? (
+                      <CompanyBox key={index}>
+                        <CompanyLogo
+                          key={item.id}
+                          src={
+                            item.logo_path
+                              ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
+                              : require('assets/NoPoster.png')
+                          }
+                          alt='logo'
+                        />
+                        <CompanyText>{item.name}</CompanyText>
+                      </CompanyBox>
+                    ) : (
+                      <CompanyBox key={index}>
+                        <CompanyLogo
+                          key={item.id}
+                          src={
+                            item.logo_path
+                              ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
+                              : require('assets/NoPoster.png')
+                          }
+                          alt='logo'
+                        />
+                        <CompanyText>{item.name}</CompanyText>
+                      </CompanyBox>
+                    )
+                  )}
+              </CompanyContainer>
+            </Company>
+            <Countries>
+              <CountriesTitle>
+                {result.production_countries ? '제작 국가' : null}
+              </CountriesTitle>
+              {result.production_countries &&
+                result.production_countries.map((item, index) =>
+                  index === result.production_countries.length - 1 ? (
+                    <CountriesText key={index}>{item.name}</CountriesText>
                   ) : (
-                    <CompanyBox key={index}>
-                      <CompanyLogo
-                        key={item.id}
-                        src={
-                          item.logo_path
-                            ? `https://image.tmdb.org/t/p/w200${item.logo_path}`
-                            : require('assets/NoPoster.png')
-                        }
-                        alt='logo'
-                      />
-                      <CompanyText>{item.name}</CompanyText>
-                    </CompanyBox>
+                    <CountriesText
+                      key={index}
+                    >{`${item.name} | `}</CountriesText>
                   )
                 )}
-            </CompanyContainer>
-          </Company>
-          <Countries>
-            <CountriesTitle>
-              {result.production_countries ? '제작 국가' : null}
-            </CountriesTitle>
-            {result.production_countries &&
-              result.production_countries.map((item, index) =>
-                index === result.production_countries.length - 1 ? (
-                  <CountriesText key={index}>{item.name}</CountriesText>
-                ) : (
-                  <CountriesText key={index}>{`${item.name} | `}</CountriesText>
-                )
-              )}
-          </Countries>
-          <Seasons>
-            <SeasonsTitle>{result.seasons ? '시리즈' : null}</SeasonsTitle>
-            <PosterFlex>
-              {result.seasons &&
-                result.seasons.map((item, index) => (
-                  <PosterContainer key={index}>
-                    <PosterImg
-                      src={
-                        item.poster_path
-                          ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
-                          : require('assets/NoPoster.png')
-                      }
-                    />
-                    <PosterTextBox>
-                      <PosterTitle>{item.name}</PosterTitle>
-                      <PosterAir>{item.air_date}</PosterAir>
-                    </PosterTextBox>
-                  </PosterContainer>
-                ))}
-            </PosterFlex>
-          </Seasons>
-          <TrailerContainer>
-            <TrailerTitle>
-              {result.videos.results.length === 0
-                ? null
-                : result.videos.results
-                ? '비디오'
-                : null}
-            </TrailerTitle>
-            {/* {result.videos.results &&
+            </Countries>
+            <Seasons>
+              <SeasonsTitle>{result.seasons ? '시리즈' : null}</SeasonsTitle>
+              <PosterFlex>
+                {result.seasons &&
+                  result.seasons.map((item, index) => (
+                    <PosterContainer key={index}>
+                      <PosterImg
+                        src={
+                          item.poster_path
+                            ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
+                            : require('assets/NoPoster.png')
+                        }
+                      />
+                      <PosterTextBox>
+                        <PosterTitle>{item.name}</PosterTitle>
+                        <PosterAir>{item.air_date}</PosterAir>
+                      </PosterTextBox>
+                    </PosterContainer>
+                  ))}
+              </PosterFlex>
+            </Seasons>
+            <TrailerContainer>
+              <TrailerTitle>
+                {result.videos.results.length === 0
+                  ? null
+                  : result.videos.results
+                  ? '비디오'
+                  : null}
+              </TrailerTitle>
+              {/* {result.videos.results &&
               result.videos.results.map((item, index) =>
                 index === result.videos.results.length - 1 ? (
                   <TrailerAnchor
@@ -426,7 +439,8 @@ function useDetail() {
                   </TrailerAnchor>
                 )
               )} */}
-          </TrailerContainer>
+            </TrailerContainer>
+          </Test>
         </Data>
       </Content>
     </Container>
