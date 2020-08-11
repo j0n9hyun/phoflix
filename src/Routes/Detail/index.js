@@ -121,7 +121,7 @@ const CompanyBox = styled.div`
   }
 `;
 const CompanyLogo = styled.img`
-  width: 150px;
+  width: 100px;
   height: auto;
   margin-bottom: 5px;
 `;
