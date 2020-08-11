@@ -120,11 +120,6 @@ const CompanyBox = styled.div`
     margin-right: 0;
   }
 `;
-const CompanyTitle = styled.p`
-  font-size: 20px;
-  margin-top: 15px;
-  margin-bottom: 8px;
-`;
 const CompanyLogo = styled.img`
   width: 150px;
   height: auto;
@@ -201,6 +196,52 @@ const PosterContainer = styled.div`
   }
 `;
 
+const SubHeading = styled.h4`
+  margin: 20px 0px 12px;
+  font-size: 20px;
+  font-weight: 600;
+`;
+
+const VideoContainer = styled.div`
+  width: 90%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+`;
+
+const Video = styled.iframe`
+  margin-right: 10px;
+`;
+
+const FigureContainer = styled.div`
+  width: 70%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+`;
+
+const Figure = styled.figure`
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  margin-right: 8px;
+`;
+
+const FigurePoster = styled.img`
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 200px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease-in-out;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const FigureCaption = styled.figcaption`
+  text-align: center;
+  padding: 4px;
+`;
+
 function useDetail() {
   const { id } = useParams();
   const { push } = useHistory();
@@ -235,10 +276,16 @@ function useDetail() {
 
   return loading ? (
     <>
+      <Helmet>
+        <title>Loading</title>
+      </Helmet>
       <Loader />
     </>
   ) : (
     <Container>
+      <Helmet>
+        <title>{result.title ? result.title : result.name}| Nomflix</title>
+      </Helmet>
       <Backdrop
         bgImage={
           result.backdrop_path
@@ -294,13 +341,14 @@ function useDetail() {
               ? result.overview
               : '개요가 기재되어 있지 않습니다.'}
           </Overview>
-          <CompanyTitle>
+          <SubHeading>
             {result.production_companies.length === 0
               ? null
               : result.production_companies
-              ? '제작사'
+              ? '제작사 및 비디오'
               : null}
-          </CompanyTitle>
+          </SubHeading>
+
           <CompanyContainer>
             {result.production_companies &&
               result.production_companies.map((c, i) =>
@@ -332,9 +380,26 @@ function useDetail() {
                   </CompanyBox>
                 )
               )}
+            {result.videos.results && result.videos.results.length > 0 && (
+              <>
+                <VideoContainer>
+                  {result.videos.results.map((video) => (
+                    <Video
+                      key={video.key}
+                      width='300'
+                      height='170'
+                      src={`https://www.youtube.com/embed/${video.key}?controls=0`}
+                      frameborder='0'
+                      allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+                      allowfullscreen
+                    ></Video>
+                  ))}
+                </VideoContainer>
+              </>
+            )}
           </CompanyContainer>
 
-          <Seasons>
+          {/* <Seasons>
             <SeasonsTitle>{result.seasons ? '시즌' : null}</SeasonsTitle>
             <PosterFlex>
               {result.seasons &&
@@ -354,7 +419,7 @@ function useDetail() {
                   </PosterContainer>
                 ))}
             </PosterFlex>
-          </Seasons>
+          </Seasons> */}
 
           <Countries>
             <CountriesTitle>
@@ -371,6 +436,28 @@ function useDetail() {
                 )
               )}
           </Countries>
+
+          {result.seasons && result.seasons.length > 0 && (
+            <>
+              <SubHeading>시즌</SubHeading>
+              <FigureContainer>
+                {result.seasons.map((season, index) => (
+                  <Figure>
+                    <FigurePoster
+                      key={index}
+                      src={
+                        season.poster_path
+                          ? `https://image.tmdb.org/t/p/original${season.poster_path}`
+                          : require('../../assets/NoPoster.png')
+                      }
+                      alt={season.name}
+                    />
+                    <FigureCaption>{season.name}</FigureCaption>
+                  </Figure>
+                ))}
+              </FigureContainer>
+            </>
+          )}
         </Data>
       </Content>
     </Container>
