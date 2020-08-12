@@ -145,57 +145,6 @@ const CountriesText = styled.span`
   margin-bottom: 5px;
 `;
 
-const Seasons = styled.div`
-  margin-bottom: 20px;
-`;
-const SeasonsTitle = styled.p`
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 10px;
-`;
-const PosterFlex = styled.div`
-  display: flex;
-  overflow: auto;
-`;
-const PosterImg = styled.img`
-  height: 130px;
-  width: auto;
-  transition: opacity 0.3s ease-in-out;
-`;
-
-const PosterTitle = styled.span`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
-`;
-const PosterAir = styled.span`
-  font-size: 1rem;
-  font-weight: 500;
-`;
-const PosterTextBox = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  margin-left: 3px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-`;
-const PosterContainer = styled.div`
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  margin-right: 15px;
-  &:hover {
-    ${PosterTextBox} {
-      opacity: 1;
-    }
-    ${PosterImg} {
-      opacity: 0.3;
-    }
-  }
-`;
-
 const SubHeading = styled.h4`
   margin: 20px 0px 12px;
   font-size: 20px;
@@ -249,10 +198,9 @@ function useDetail() {
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
-  const [credit, setCredit] = useState(null);
 
   const isMovie = pathname.includes('/movie/');
-  const isCasting = pathname.includes(`/movie/${id}`);
+
   const Detail = async () => {
     const parsedId = parseInt(id);
     if (isNaN(parsedId)) {
@@ -260,17 +208,13 @@ function useDetail() {
     }
 
     let result = null;
-    let credit = null;
     try {
       if (isMovie) {
         ({ data: result } = await moviesApi.movieDetail(parsedId));
       } else {
         ({ data: result } = await tvApi.showDetail(parsedId));
       }
-      if (isCasting) {
-        ({ data: credit } = await moviesApi.casting(parsedId));
-        setCredit(credit);
-      }
+
       setResult(result);
     } catch (e) {
       console.log(e);
@@ -278,7 +222,6 @@ function useDetail() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     Detail();
   }, []);
@@ -408,34 +351,11 @@ function useDetail() {
             )}
           </CompanyContainer>
 
-          {/* <Seasons>
-            <SeasonsTitle>{result.seasons ? '시즌' : null}</SeasonsTitle>
-            <PosterFlex>
-              {result.seasons &&
-                result.seasons.map((item, i) => (
-                  <PosterContainer key={i}>
-                    <PosterImg
-                      src={
-                        item.poster_path
-                          ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
-                          : require('assets/NoPoster.png')
-                      }
-                    />
-                    <PosterTextBox>
-                      <PosterTitle>{item.name}</PosterTitle>
-                      <PosterAir>{item.air_date}</PosterAir>
-                    </PosterTextBox>
-                  </PosterContainer>
-                ))}
-            </PosterFlex>
-          </Seasons> */}
-
           <Countries>
-            {result.tagline ? `${result.tagline}` : null}
+            {/* {result.tagline ? `${result.tagline}` : null} */}
             <CountriesTitle>
               {result.production_countries ? '국가' : null}
             </CountriesTitle>
-            {credit.cast}
             {result.production_countries &&
               result.production_countries.map((c, i) =>
                 i === result.production_countries.length - 1 ? (

@@ -18,7 +18,6 @@ export const moviesApi = {
         append_to_response: 'videos',
       },
     }),
-  casting: (id) => api.get(`movie/${id}/credits`),
   search: (term) =>
     api.get('search/movie', {
       params: {
