@@ -249,18 +249,27 @@ function useDetail() {
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
+  const [credit, setCredit] = useState(null);
+
   const isMovie = pathname.includes('/movie/');
+  const isCasting = pathname.includes(`/movie/${id}`);
   const Detail = async () => {
     const parsedId = parseInt(id);
     if (isNaN(parsedId)) {
       return push('/');
     }
+
     let result = null;
+    let credit = null;
     try {
       if (isMovie) {
         ({ data: result } = await moviesApi.movieDetail(parsedId));
       } else {
         ({ data: result } = await tvApi.showDetail(parsedId));
+      }
+      if (isCasting) {
+        ({ data: credit } = await moviesApi.casting(parsedId));
+        setCredit(credit);
       }
       setResult(result);
     } catch (e) {
@@ -284,7 +293,7 @@ function useDetail() {
   ) : (
     <Container>
       <Helmet>
-        <title>{result.title ? result.title : result.name}| Nomflix</title>
+        <title>{result.title ? result.title : result.name}</title>
       </Helmet>
       <Backdrop
         bgImage={
@@ -422,9 +431,11 @@ function useDetail() {
           </Seasons> */}
 
           <Countries>
+            {result.tagline ? `${result.tagline}` : null}
             <CountriesTitle>
               {result.production_countries ? '국가' : null}
             </CountriesTitle>
+            {credit.cast}
             {result.production_countries &&
               result.production_countries.map((c, i) =>
                 i === result.production_countries.length - 1 ? (
